@@ -1,18 +1,10 @@
-## Getting Started
+## 课程设计：新闻信息管理系统
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+这是一个新闻信息管理系统，主要面向新闻编辑，实现新闻的发布与维护、分类管理、以及新闻的浏览和检索功能。系统基于软件工程的理论和方法，采用 `Java (Swing)` 技术、数据库采用 `MySQL` 技术设计开发
 
-## Folder Structure
+### 设计要求
 
-The workspace contains two folders by default, where:
-
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
-
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+1. 需要使用 `Java (Swing)` 技术，不依赖第三方库，实现一个GUI程序
+2. 需要使用 `MySQL` 作为数据库
+3. 需要实现新闻的标题/内容检索、新闻的增删改查、新闻分类（如按类型、时间等）
+4. 需要使用面向对象编程、使用清晰的代码结构和类封装
