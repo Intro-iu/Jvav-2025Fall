@@ -14,38 +14,38 @@ public class LoginView extends JFrame {
     private UserService userService = new UserService();
 
     public LoginView() {
-        setTitle("Login - News System");
+        setTitle("登录 - 新闻信息管理系统");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Center window
+        setLocationRelativeTo(null); // 居中显示
         setLayout(new BorderLayout());
 
-        // Header
-        JLabel lblTitle = new JLabel("Login", SwingConstants.CENTER);
-        lblTitle.setFont(new Font("Arial", Font.BOLD, 24));
+        // 标题
+        JLabel lblTitle = new JLabel("用户登录", SwingConstants.CENTER);
+        lblTitle.setFont(new Font("SimHei", Font.BOLD, 24)); // 使用黑体以支持中文
         lblTitle.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         add(lblTitle, BorderLayout.NORTH);
 
-        // Form Panel
+        // 表单面板
         JPanel formPanel = new JPanel(new GridLayout(3, 2, 10, 10));
         formPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
 
-        formPanel.add(new JLabel("Username:"));
+        formPanel.add(new JLabel("用户名:"));
         txtUsername = new JTextField();
         formPanel.add(txtUsername);
 
-        formPanel.add(new JLabel("Password:"));
+        formPanel.add(new JLabel("密  码:"));
         txtPassword = new JPasswordField();
         formPanel.add(txtPassword);
 
-        // Empty label for spacing
+        // 占位
         formPanel.add(new JLabel("")); 
-        btnLogin = new JButton("Login");
+        btnLogin = new JButton("登录");
         formPanel.add(btnLogin);
 
         add(formPanel, BorderLayout.CENTER);
 
-        // Event Listener
+        // 事件监听
         btnLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -59,17 +59,17 @@ public class LoginView extends JFrame {
         String password = new String(txtPassword.getPassword()).trim();
 
         if (username.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter both username and password.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "请输入用户名和密码。", "错误", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         User user = userService.login(username, password);
         if (user != null) {
-            JOptionPane.showMessageDialog(this, "Login Successful! Welcome, " + user.getNickname());
-            dispose(); // Close login window
-            new MainView().setVisible(true); // Open main window
+            JOptionPane.showMessageDialog(this, "登录成功！欢迎, " + user.getNickname());
+            dispose(); // 关闭登录窗口
+            new MainView().setVisible(true); // 打开主界面
         } else {
-            JOptionPane.showMessageDialog(this, "Invalid username or password.", "Login Failed", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "用户名或密码错误。", "登录失败", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
