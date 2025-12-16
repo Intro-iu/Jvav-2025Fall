@@ -1,25 +1,34 @@
 package util;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 
 public class DBUtil {
-    // Database configuration
-    // TODO: Update these values to match your local MySQL setup
-    private static final String URL = "jdbc:mysql://localhost:3306/news_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-    private static final String USER = "root"; 
-    private static final String PASSWORD = "root"; // Common default, change if needed
+    private static Properties props = new Properties();
 
     static {
         try {
             // Load MySQL JDBC Driver
             Class.forName("com.mysql.cj.jdbc.Driver");
+            
+            // Load properties
+            InputStream in = DBUtil.class.getClassLoader().getResourceAsStream("db.properties");
+            if (in == null) {
+                throw new RuntimeException("db.properties not found in classpath!");
+            }
+            props.load(in);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             throw new RuntimeException("MySQL JDBC Driver not found! Please add mysql-connector-j.jar to lib/");
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to load database configuration!");
         }
     }
 
@@ -27,7 +36,11 @@ public class DBUtil {
      * Get database connection
      */
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASSWORD);
+        return DriverManager.getConnection(
+            props.getProperty("db.url"),
+            props.getProperty("db.username"),
+            props.getProperty("db.password")
+        );
     }
 
     /**

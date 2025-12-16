@@ -24,6 +24,7 @@ public class UserDAO {
 
         try {
             conn = DBUtil.getConnection();
+            System.out.println("DEBUG: Database connected successfully.");
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, username);
             pstmt.setString(2, password);
