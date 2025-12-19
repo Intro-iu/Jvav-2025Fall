@@ -1,75 +1,132 @@
 package view;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.*;
+import view.component.ModernButton;
+import view.component.ModernPasswordField;
+import view.component.ModernTextField;
+import view.component.DialogFactory;
+import view.component.PatternPanel;
+import view.theme.Theme;
 import model.User;
 import service.UserService;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 public class LoginView extends JFrame {
-    private JTextField txtUsername;
-    private JPasswordField txtPassword;
-    private JButton btnLogin;
     private UserService userService = new UserService();
 
     public LoginView() {
-        setTitle("登录 - 新闻信息管理系统");
-        setSize(400, 300);
+        setTitle("LOGIN - NEWS SYSTEM");
+        setSize(400, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // 居中显示
-        setLayout(new BorderLayout());
+        setLocationRelativeTo(null);
+        setUndecorated(true);
 
-        // 标题
-        JLabel lblTitle = new JLabel("用户登录", SwingConstants.CENTER);
-        lblTitle.setFont(new Font("SimHei", Font.BOLD, 24)); // 使用黑体以支持中文
-        lblTitle.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
-        add(lblTitle, BorderLayout.NORTH);
+        // Main Panel with Dot Pattern
+        PatternPanel rootPanel = new PatternPanel(PatternPanel.Pattern.DOTS);
+        rootPanel.setLayout(new BorderLayout());
+        rootPanel.setBorder(BorderFactory.createLineBorder(Theme.ACCENT_COLOR, 2));
 
-        // 表单面板
-        JPanel formPanel = new JPanel(new GridLayout(3, 2, 10, 10));
-        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
+        // Drag Handler
+        MouseDragHandler dragHandler = new MouseDragHandler(this);
+        rootPanel.addMouseListener(dragHandler);
+        rootPanel.addMouseMotionListener(dragHandler);
 
-        formPanel.add(new JLabel("用户名:"));
-        txtUsername = new JTextField();
-        formPanel.add(txtUsername);
+        add(rootPanel);
 
-        formPanel.add(new JLabel("密  码:"));
-        txtPassword = new JPasswordField();
-        formPanel.add(txtPassword);
+        // Center Login Form
+        JPanel loginPanel = new JPanel();
+        loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.Y_AXIS));
+        loginPanel.setOpaque(false);
+        loginPanel.setBorder(BorderFactory.createEmptyBorder(50, 40, 50, 40));
 
-        // 占位
-        formPanel.add(new JLabel("")); 
-        btnLogin = new JButton("登录");
-        formPanel.add(btnLogin);
+        // Logo / Title
+        JLabel lblTitle = new JLabel("SYSTEM LOGIN");
+        lblTitle.setFont(Theme.FONT_EN_TITLE.deriveFont(28f));
+        lblTitle.setForeground(Theme.ACCENT_COLOR);
+        lblTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+        loginPanel.add(lblTitle);
 
-        add(formPanel, BorderLayout.CENTER);
+        loginPanel.add(Box.createVerticalStrut(40));
 
-        // 事件监听
-        btnLogin.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handleLogin();
+        // Username
+        JLabel lblUser = new JLabel("USERNAME:");
+        lblUser.setForeground(Theme.TEXT_DIM_COLOR);
+        lblUser.setFont(Theme.FONT_EN_TECH);
+        loginPanel.add(createAlignedPanel(lblUser));
+
+        ModernTextField txtUsername = new ModernTextField();
+        // Input cleared
+        loginPanel.add(txtUsername);
+
+        loginPanel.add(Box.createVerticalStrut(20));
+
+        // Password
+        JLabel lblPass = new JLabel("PASSWORD:");
+        lblPass.setForeground(Theme.TEXT_DIM_COLOR);
+        lblPass.setFont(Theme.FONT_EN_TECH);
+        loginPanel.add(createAlignedPanel(lblPass));
+
+        ModernPasswordField txtPassword = new ModernPasswordField();
+        // Input cleared
+        loginPanel.add(txtPassword);
+
+        loginPanel.add(Box.createVerticalStrut(40));
+
+        // Buttons
+        ModernButton btnLogin = new ModernButton("ENTER SYSTEM", true);
+        btnLogin.addActionListener(e -> {
+            String username = txtUsername.getText();
+            String password = new String(txtPassword.getPassword());
+            User user = userService.login(username, password);
+            if (user != null) {
+                new MainView(user).setVisible(true);
+                this.dispose();
+            } else {
+                DialogFactory.showMessage(this, "INVALID CREDENTIALS / 用户名或密码错误", "LOGIN FAILED");
             }
         });
+
+        ModernButton btnExit = new ModernButton("EXIT");
+        btnExit.addActionListener(e -> System.exit(0));
+
+        loginPanel.add(btnLogin);
+        loginPanel.add(Box.createVerticalStrut(10));
+        loginPanel.add(btnExit);
+
+        rootPanel.add(loginPanel, BorderLayout.CENTER);
     }
 
-    private void handleLogin() {
-        String username = txtUsername.getText().trim();
-        String password = new String(txtPassword.getPassword()).trim();
+    private JPanel createAlignedPanel(JComponent c) {
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        p.setOpaque(false);
+        p.add(c);
+        p.setMaximumSize(new Dimension(Integer.MAX_VALUE, 20));
+        return p;
+    }
 
-        if (username.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "请输入用户名和密码。", "错误", JOptionPane.ERROR_MESSAGE);
-            return;
+    // Internal Drag Handler
+    private static class MouseDragHandler extends MouseAdapter {
+        private Point mouseDownCompCoords = null;
+        private JFrame frame;
+
+        public MouseDragHandler(JFrame frame) {
+            this.frame = frame;
         }
 
-        User user = userService.login(username, password);
-        if (user != null) {
-            JOptionPane.showMessageDialog(this, "登录成功！欢迎, " + user.getNickname());
-            dispose(); // 关闭登录窗口
-            new MainView().setVisible(true); // 打开主界面
-        } else {
-            JOptionPane.showMessageDialog(this, "用户名或密码错误。", "登录失败", JOptionPane.ERROR_MESSAGE);
+        public void mouseReleased(MouseEvent e) {
+            mouseDownCompCoords = null;
+        }
+
+        public void mousePressed(MouseEvent e) {
+            mouseDownCompCoords = e.getPoint();
+        }
+
+        public void mouseDragged(MouseEvent e) {
+            Point currCoords = e.getLocationOnScreen();
+            frame.setLocation(currCoords.x - mouseDownCompCoords.x, currCoords.y - mouseDownCompCoords.y);
         }
     }
 }
