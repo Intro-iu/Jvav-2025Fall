@@ -70,12 +70,8 @@ To package the application into a JAR file:
 ### Directory Structure for Release (发布目录结构)
 ```
 Release/
-├── JvavNews.jar             # Lightweight App (Requires lib/)
-├── JvavNews-Standalone.jar  # Fat JAR (Built-in dependencies, Single file)
-├── run.bat                  # Quick Start Script
-├── lib/                     # Dependency Libraries
-│   └── mysql-connector-j-*.jar
-└── fonts/                   # Embedded Fonts (Reference)
+├── JvavNews.jar       # Executable Application (Single File)
+└── run.bat            # Quick Start Script
 ```
 
 ### Build & Run (编译与运行)
