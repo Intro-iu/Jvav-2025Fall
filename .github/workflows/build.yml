@@ -32,9 +32,16 @@ jobs:
         mkdir -p bin/fonts
         cp -r src/fonts/* bin/fonts/
 
-    - name: Build JAR
-      # -C bin . includes all compiled classes and resources
-      run: jar cvfm JvavNews.jar MANIFEST.MF -C bin .
+    - name: Build Fat JAR (Stand-alone)
+      # 1. Extract MySQL Driver to bin/
+      # 2. Remove Signature files to prevent security errors
+      # 3. Create simplified Manifest (No Class-Path needed)
+      # 4. Repackage everything
+      run: |
+        unzip -o lib/mysql-connector-j-*.jar -d bin/
+        rm -rf bin/META-INF
+        echo "Main-Class: App" > FAT_MANIFEST.MF
+        jar cvfm JvavNews-Standalone.jar FAT_MANIFEST.MF -C bin .
 
     - name: Upload Release Artifact
       uses: actions/upload-artifact@v4
@@ -42,5 +49,6 @@ jobs:
         name: JvavNews-Release
         path: |
           JvavNews.jar
+          JvavNews-Standalone.jar
           run.bat
           lib/
