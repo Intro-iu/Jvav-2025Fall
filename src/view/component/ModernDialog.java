@@ -8,6 +8,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class ModernDialog extends JDialog {
+    private static final long serialVersionUID = 1L;
     private Point mouseDownCompCoords;
 
     public ModernDialog(Window owner, String title, int width, int height) {
@@ -35,7 +36,7 @@ public class ModernDialog extends JDialog {
 
         // Close Button
         ModernButton btnClose = new ModernButton("X");
-        btnClose.setPreferredSize(new Dimension(40, 30));
+        btnClose.setPreferredSize(new Dimension(60, 30));
         btnClose.addActionListener(e -> dispose());
         titleBar.add(btnClose, BorderLayout.EAST);
 

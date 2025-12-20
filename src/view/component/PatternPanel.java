@@ -5,8 +5,10 @@ import javax.swing.*;
 import java.awt.*;
 
 public class PatternPanel extends JPanel {
+    private static final long serialVersionUID = 1L;
+
     public enum Pattern {
-        NONE, DOTS, SLASHES, RECTANGLES
+        POINTS, LINES, RECTANGLES, NONE
     }
 
     private Pattern pattern = Pattern.NONE;
@@ -38,7 +40,7 @@ public class PatternPanel extends JPanel {
         switch (pattern) {
             case NONE:
                 break;
-            case DOTS:
+            case POINTS:
                 int gap = 20;
                 for (int x = 0; x < w; x += gap) {
                     for (int y = 0; y < h; y += gap) {
@@ -46,10 +48,9 @@ public class PatternPanel extends JPanel {
                     }
                 }
                 break;
-            case SLASHES:
+            case LINES:
                 int space = 30;
                 for (int i = -h; i < w; i += space) {
-                    g2.setStroke(new BasicStroke(1));
                     g2.drawLine(i, 0, i + h, h);
                 }
                 break;

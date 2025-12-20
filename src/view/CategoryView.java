@@ -6,13 +6,12 @@ import view.component.*;
 import view.theme.Theme;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
 public class CategoryView extends JPanel {
-    private IndustrialTable table;
-    private DefaultTableModel tableModel;
+    private static final long serialVersionUID = 1L;
+    private JPanel listPanel;
     private CategoryService categoryService = new CategoryService();
 
     public CategoryView() {
@@ -20,79 +19,78 @@ public class CategoryView extends JPanel {
         setBackground(Theme.BG_COLOR);
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Center Panel: Table
-        String[] columnNames = { "ID", "名称" };
-        tableModel = new DefaultTableModel(columnNames, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        table = new IndustrialTable(tableModel);
+        // Top Panel: Title & Add
+        JPanel pnlTop = new JPanel(new BorderLayout());
+        pnlTop.setBackground(Theme.BG_COLOR);
+        pnlTop.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 
-        JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.getViewport().setBackground(Theme.BG_COLOR);
-        scrollPane.setBorder(BorderFactory.createLineBorder(Theme.SIDEBAR_COLOR));
-        add(scrollPane, BorderLayout.CENTER);
+        JLabel lblTitle = new JLabel("CATEGORY MANAGEMENT");
+        lblTitle.setFont(Theme.FONT_EN_TITLE);
+        lblTitle.setForeground(Theme.ACCENT_COLOR);
 
-        // Bottom Panel: Actions
-        JPanel pnlBottom = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        pnlBottom.setBackground(Theme.BG_COLOR);
-        pnlBottom.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-
-        ModernButton btnAdd = new ModernButton("ADD");
-        ModernButton btnEdit = new ModernButton("EDIT");
-        ModernButton btnDelete = new ModernButton("DELETE");
-        ModernButton btnRefresh = new ModernButton("REFRESH");
-
+        ModernButton btnAdd = new ModernButton("+ ADD CATEGORY", true);
+        btnAdd.setPreferredSize(new Dimension(150, 30));
         btnAdd.addActionListener(e -> openEditDialog(null));
-        btnEdit.addActionListener(e -> {
-            int selectedRow = table.getSelectedRow();
-            if (selectedRow >= 0) {
-                int id = (int) tableModel.getValueAt(selectedRow, 0);
-                String name = (String) tableModel.getValueAt(selectedRow, 1);
-                openEditDialog(new Category(id, name));
-            } else {
-                DialogFactory.showMessage(this, "Please select a category.", "INFO");
-            }
-        });
-        btnDelete.addActionListener(e -> deleteCategory());
-        btnRefresh.addActionListener(e -> loadCategories());
 
-        pnlBottom.add(btnAdd);
-        pnlBottom.add(btnEdit);
-        pnlBottom.add(btnDelete);
-        pnlBottom.add(btnRefresh);
+        pnlTop.add(lblTitle, BorderLayout.WEST);
+        pnlTop.add(btnAdd, BorderLayout.EAST);
 
-        add(pnlBottom, BorderLayout.SOUTH);
+        add(pnlTop, BorderLayout.NORTH);
+
+        // Center Panel: List
+        listPanel = new ScrollablePanel();
+        listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
+        listPanel.setBackground(Theme.BG_COLOR);
+
+        JScrollPane scrollPane = new JScrollPane(listPanel);
+        scrollPane.setBackground(Theme.BG_COLOR);
+        scrollPane.getViewport().setBackground(Theme.BG_COLOR);
+        scrollPane.setBorder(null);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        JScrollBar vsb = scrollPane.getVerticalScrollBar();
+        vsb.setBackground(Theme.BG_COLOR);
+        vsb.setUI(new ModernScrollBarUI());
+
+        add(scrollPane, BorderLayout.CENTER);
 
         // Initial Load
         loadCategories();
     }
 
     private void loadCategories() {
-        tableModel.setRowCount(0);
+        listPanel.removeAll();
         List<Category> list = categoryService.findAll();
-        for (Category c : list) {
-            tableModel.addRow(new Object[] { c.getId(), c.getName() });
+
+        if (list.isEmpty()) {
+            JLabel lblEmpty = new JLabel("NO CATEGORIES FOUND");
+            lblEmpty.setFont(Theme.FONT_EN_TECH);
+            lblEmpty.setForeground(Theme.TEXT_DIM_COLOR);
+            lblEmpty.setAlignmentX(Component.CENTER_ALIGNMENT);
+            lblEmpty.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
+            listPanel.add(lblEmpty);
+        } else {
+            for (Category c : list) {
+                CategoryCard card = new CategoryCard(c,
+                        e -> openEditDialog(c),
+                        e -> deleteCategory(c));
+                listPanel.add(card);
+                listPanel.add(Box.createVerticalStrut(5));
+            }
         }
+
+        listPanel.revalidate();
+        listPanel.repaint();
     }
 
-    private void deleteCategory() {
-        int selectedRow = table.getSelectedRow();
-        if (selectedRow == -1) {
-            DialogFactory.showMessage(this, "Please select a category to delete.", "INFO");
-            return;
-        }
-        int id = (int) tableModel.getValueAt(selectedRow, 0);
-        String name = (String) tableModel.getValueAt(selectedRow, 1);
-
+    private void deleteCategory(Category c) {
         boolean confirm = DialogFactory.showConfirm(this,
-                "Delete category '" + name + "'?\nWarning: This might fail if news exists in this category.",
+                "Delete category '" + c.getName() + "'?\nWarning: This might fail if news exists in this category.",
                 "CONFIRM DELETE");
 
         if (confirm) {
-            if (categoryService.delete(id)) {
+            if (categoryService.delete(c.getId())) {
                 DialogFactory.showMessage(this, "Deleted Successfully", "SUCCESS");
                 loadCategories();
             } else {
@@ -103,7 +101,7 @@ public class CategoryView extends JPanel {
 
     private void openEditDialog(Category category) {
         JDialog dialog = DialogFactory.createDialog(SwingUtilities.getWindowAncestor(this),
-                category == null ? "ADD CATEGORY" : "EDIT CATEGORY", 300, 200);
+                category == null ? "ADD CATEGORY" : "EDIT CATEGORY", 350, 200);
 
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
@@ -120,6 +118,7 @@ public class CategoryView extends JPanel {
 
         JPanel btnPanel = new JPanel();
         btnPanel.setBackground(Theme.BG_COLOR);
+
         ModernButton btnSave = new ModernButton("SAVE", true);
         ModernButton btnCancel = new ModernButton("CANCEL");
 

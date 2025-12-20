@@ -1,57 +1,96 @@
-## 课程设计：新闻信息管理系统
+# Jvav News System (2025 Fall)
 
-这是一个新闻信息管理系统，主要面向新闻编辑，实现新闻的发布与维护、分类管理、以及新闻的浏览和检索功能。系统基于软件工程的理论和方法，采用 `Java (Swing)` 技术、数据库采用 `MySQL` 技术设计开发
+A **Modern Industrial Minimalist** desktop news management system built with Java Swing and MySQL.
+This project demonstrates how to create a high-end, aesthetic, and functional GUI application without relying on third-party UI libraries.
 
-### 设计要求
+## ✨ Features / 特性
 
-1. 需要使用 `Java (Swing)` 技术，不依赖第三方库，实现一个GUI程序
-2. 需要使用 `MySQL` 作为数据库
-3. 需要实现新闻的标题/内容检索、新闻的增删改查、新闻分类（如按类型、时间等）
-4. 需要使用面向对象编程、使用清晰的代码结构和类封装
+### 🎨 Modern Industrial UI (现代工业风界面)
+- **High-End Design**: Dark-themed aesthetics with "Cyberpunk/Industrial" accents (Yellow/Cyan).
+- **Custom Components**: Completely rewritten Swing components including Buttons, TextFields, ComboBoxes, and Scrollbars.
+- **Undecorated Window**: Custom-drawn application frame with integrated title bar and window controls (Min/Max/Close).
 
-### 开发指南
+### 📰 Unified News Feed (一体化新闻流)
+- **Website-Like Experience**: Browse news in a clean, responsive card layout (`NewsCard`).
+- **Seamless Management**: "Edit" and "Delete" buttons are integrated directly into the cards for a "What You See Is What You Get" experience.
+- **Smart Formatting**: Automatic handling of Chinese/English mixed fonts.
 
-#### 1. 环境准备
-*   JDK 8 或更高版本
-*   MySQL 8.0+
-*   将 `mysql-connector-j-8.x.x.jar` 放入 `lib/` 目录
+### 🏷️ Tile-Based Category Management (磁贴式分类管理)
+- **Visual Tiles**: Categories managed via an interactive tile grid/list (`CategoryCard`) instead of boring tables.
+- **Quick Actions**: Direct edit/delete capabilities on each tile.
 
-#### 2. 数据库配置
-1.  首先在 MySQL 中执行初始化脚本：
-    ```bash
-    mysql -u root -p < sql/init.sql
-    ```
-2.  修改配置文件 `src/db.properties`，填入你的数据库真实账号密码：
+### 🛠️ Core Functionality
+- **User Authentication**: Secure login with dedicated UI.
+- **Search & Filter**: Real-time filtering by Title and Category with "Clear" functionality.
+- **Pagination**: Efficient data loading with paged results.
+- **Data Persistence**: Robust MySQL integration via JDBC.
+
+---
+
+## 🛠️ Tech Stack (技术栈)
+
+- **Language**: Java (JDK 8+)
+- **GUI**: Java Swing (Standard Library only, No flatlaf/substance etc.)
+- **Database**: MySQL (5.7 / 8.0)
+- **Driver**: MySQL Connector/J
+
+---
+
+## 🚀 Getting Started (快速开始)
+
+### Prerequisites (环境要求)
+1.  **JDK**: Installed and configured in PATH.
+2.  **MySQL**: Server running.
+3.  **Drivers**: Place `mysql-connector-j-*.jar` in `lib/` directory.
+
+### Database Setup (数据库配置)
+1.  Connect to your MySQL server.
+2.  Run the initialization script located at `sql/init.sql`.
+    > This will create the `newssys` database and populate it with mock data (User: `admin`/`123456`).
+3.  Verify/Edit `src/db.properties` configuration (created on first run or manually):
     ```properties
-    db.url=jdbc:mysql://localhost:3306/news_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    db.username=root
-    db.password=你的密码
+    url=jdbc:mysql://localhost:3306/newssys?useSSL=false&characterEncoding=utf8
+    username=root
+    password=your_password
     ```
 
-#### 3. 编译与运行
-由于没有使用构建工具（如Maven），请使用以下命令手动编译和运行。
+### Build & Run (编译与运行)
 
-**编译 (Compile):**
-```bash
-# 确保 bin 目录存在
-mkdir -p bin
+**Windows (PowerShell):**
 
-# 复制配置文件到 classpath (重要!)
-cp src/db.properties bin/
+1.  **Compile:**
+    ```powershell
+    mkdir bin -Force
+    javac -d bin -cp "lib/*" -encoding UTF-8 -sourcepath src src/App.java
+    ```
 
-# 编译 Java 源代码
-javac -d bin -cp "lib/*" -sourcepath src src/App.java
+2.  **Run:**
+    ```powershell
+    java -cp "bin;lib/*" App
+    ```
+
+---
+
+## 📂 Project Structure (项目结构)
+
+```
+Jvav-2025Fall/
+├── lib/                 # Dependencies (MySQL Connector)
+├── sql/                 # Database scripts (init.sql)
+├── src/                 # Source Code
+│   ├── App.java         # Entry Point
+│   ├── model/           # Data Models (Entity)
+│   ├── demo/            # DAO Implementation
+│   ├── service/         # Business Logic
+│   ├── util/            # Utilities (DB, WindowResizer)
+│   └── view/            # GUI Implementation
+│       ├── component/   # Custom UI Kit (Buttons, Cards, Dialogs...)
+│       ├── theme/       # Theme Constants (Colors, Fonts)
+│       ├── HomeView.java
+│       ├── MainView.java
+│       └── ...
+└── README.md
 ```
 
-**运行 (Run):**
-```bash
-# Windows (使用分号 ; 分隔)
-java -cp "bin;lib/*" App
-
-# macOS / Linux (使用冒号 : 分隔)
-java -cp "bin:lib/*" App
-```
-
-#### 4. 默认账号
-*   **用户名**: `admin`
-*   **密码**: `admin123`
+## 📝 License
+Course Assignment - 2025 Fall.

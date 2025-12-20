@@ -7,6 +7,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class ModernButton extends JButton {
+    private static final long serialVersionUID = 1L;
     private boolean isHovered = false;
     private boolean isActive = false;
     private Color hoverColor = Theme.ACCENT_COLOR;

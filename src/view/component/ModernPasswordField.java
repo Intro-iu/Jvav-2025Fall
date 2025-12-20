@@ -8,6 +8,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
 public class ModernPasswordField extends JPasswordField {
+    private static final long serialVersionUID = 1L;
     private boolean isFocused = false;
 
     public ModernPasswordField() {

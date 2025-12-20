@@ -15,6 +15,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class LoginView extends JFrame {
+    private static final long serialVersionUID = 1L;
     private UserService userService = new UserService();
 
     public LoginView() {
@@ -25,8 +26,8 @@ public class LoginView extends JFrame {
         setUndecorated(true);
 
         // Main Panel with Dot Pattern
-        PatternPanel rootPanel = new PatternPanel(PatternPanel.Pattern.DOTS);
-        rootPanel.setLayout(new BorderLayout());
+        PatternPanel rootPanel = new PatternPanel(PatternPanel.Pattern.POINTS);
+        rootPanel.setLayout(new GridBagLayout());
         rootPanel.setBorder(BorderFactory.createLineBorder(Theme.ACCENT_COLOR, 2));
 
         // Drag Handler
@@ -96,7 +97,7 @@ public class LoginView extends JFrame {
         loginPanel.add(Box.createVerticalStrut(10));
         loginPanel.add(btnExit);
 
-        rootPanel.add(loginPanel, BorderLayout.CENTER);
+        rootPanel.add(loginPanel, new GridBagConstraints());
     }
 
     private JPanel createAlignedPanel(JComponent c) {

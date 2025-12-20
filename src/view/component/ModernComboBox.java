@@ -7,6 +7,7 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 import java.awt.*;
 
 public class ModernComboBox<E> extends JComboBox<E> {
+    private static final long serialVersionUID = 1L;
 
     public ModernComboBox() {
         setUI(new ModernComboBoxUI());
@@ -45,6 +46,8 @@ public class ModernComboBox<E> extends JComboBox<E> {
     }
 
     private class ModernListCellRenderer extends DefaultListCellRenderer {
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
                 boolean cellHasFocus) {
