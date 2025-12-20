@@ -30,14 +30,14 @@ public class ConfigDialog extends ModernDialog {
         // URL
         addLabel(content, "DATABASE URL:");
         txtUrl = new ModernTextField(
-                props.getProperty("db.url", "jdbc:mysql://localhost:3306/newssys?useSSL=false&characterEncoding=utf8"));
+                props.getProperty("db.url", ""));
         txtUrl.setCaretPosition(0);
         content.add(txtUrl);
         content.add(Box.createVerticalStrut(15));
 
         // User
         addLabel(content, "USERNAME:");
-        txtUser = new ModernTextField(props.getProperty("db.username", "root"));
+        txtUser = new ModernTextField(props.getProperty("db.username", ""));
         content.add(txtUser);
         content.add(Box.createVerticalStrut(15));
 
