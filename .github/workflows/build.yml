@@ -1,0 +1,46 @@
+name: Build JvavNews System
+
+on:
+  push:
+    branches: [ "master", "main" ]
+  pull_request:
+    branches: [ "master", "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Create bin directory
+      run: mkdir -p bin
+
+    - name: Compile Java Sources
+      # -cp "lib/*" allows including all jars in lib/
+      run: javac -d bin -cp "lib/*" -sourcepath src -encoding UTF-8 src/App.java
+
+    - name: Copy Resources (Fonts)
+      # Copy fonts from src/fonts to bin/fonts so they are included in the JAR
+      run: |
+        mkdir -p bin/fonts
+        cp -r src/fonts/* bin/fonts/
+
+    - name: Build JAR
+      # -C bin . includes all compiled classes and resources
+      run: jar cvfm JvavNews.jar MANIFEST.MF -C bin .
+
+    - name: Upload Release Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: JvavNews-Release
+        path: |
+          JvavNews.jar
+          run.bat
+          lib/

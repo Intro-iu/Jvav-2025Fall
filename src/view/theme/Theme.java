@@ -1,7 +1,6 @@
 package view.theme;
 
 import java.awt.*;
-import java.io.File;
 
 public class Theme {
     // Colors
@@ -29,31 +28,50 @@ public class Theme {
 
     private static void loadFonts() {
         try {
-            // Load custom fonts from local fonts directory
-            // Note: In a real jar release, we'd use getResourceAsStream
-            FONT_TITLE = Font.createFont(Font.TRUETYPE_FONT, new File("fonts/方正准雅宋简体.TTF")).deriveFont(24f);
-            FONT_REGULAR = Font.createFont(Font.TRUETYPE_FONT, new File("fonts/SourceHanSansSC-Normal.otf"))
-                    .deriveFont(14f);
-            FONT_EN_TITLE = Font.createFont(Font.TRUETYPE_FONT, new File("fonts/NOVECENTO-WIDE-NORMAL-2.OTF"))
-                    .deriveFont(Font.BOLD, 20f);
-            FONT_EN_TECH = Font.createFont(Font.TRUETYPE_FONT, new File("fonts/JOVANNY LEMONAD - BENDER.OTF"))
-                    .deriveFont(12f);
+            // Load custom fonts from classpath (supports JAR packaging)
+            FONT_TITLE = loadFont("/fonts/方正准雅宋简体.TTF", 24f);
+            FONT_REGULAR = loadFont("/fonts/SourceHanSansSC-Normal.otf", 14f);
+            FONT_EN_TITLE = loadFont("/fonts/NOVECENTO-WIDE-NORMAL-2.OTF", 20f); // Bold is handled by registering? No,
+                                                                                 // deriveFont logic needed
+            if (FONT_EN_TITLE != null)
+                FONT_EN_TITLE = FONT_EN_TITLE.deriveFont(Font.BOLD, 20f);
 
-            // Register to GraphicsEnv just in case
+            FONT_EN_TECH = loadFont("/fonts/JOVANNY LEMONAD - BENDER.OTF", 12f);
+
+            // Register to GraphicsEnv
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(FONT_TITLE);
-            ge.registerFont(FONT_REGULAR);
-            ge.registerFont(FONT_EN_TITLE);
-            ge.registerFont(FONT_EN_TECH);
-
+            if (FONT_TITLE != null)
+                ge.registerFont(FONT_TITLE);
+            if (FONT_REGULAR != null)
+                ge.registerFont(FONT_REGULAR);
+            if (FONT_EN_TITLE != null)
+                ge.registerFont(FONT_EN_TITLE);
+            if (FONT_EN_TECH != null)
+                ge.registerFont(FONT_EN_TECH);
         } catch (Exception e) {
             System.err.println("Failed to load fonts, using defaults.");
             e.printStackTrace();
-            // Fallbacks
-            FONT_TITLE = new Font("SimHei", Font.BOLD, 24);
-            FONT_REGULAR = new Font("Microsoft YaHei", Font.PLAIN, 14);
-            FONT_EN_TITLE = new Font("Impact", Font.PLAIN, 20);
-            FONT_EN_TECH = new Font("Consolas", Font.PLAIN, 12);
+            useDefaults();
         }
+    }
+
+    private static Font loadFont(String path, float size) {
+        try (java.io.InputStream is = Theme.class.getResourceAsStream(path)) {
+            if (is == null) {
+                System.err.println("Font not found: " + path);
+                return null;
+            }
+            return Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(size);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private static void useDefaults() {
+        FONT_TITLE = new Font("SimHei", Font.BOLD, 24);
+        FONT_REGULAR = new Font("Microsoft YaHei", Font.PLAIN, 14);
+        FONT_EN_TITLE = new Font("Impact", Font.PLAIN, 20);
+        FONT_EN_TECH = new Font("Consolas", Font.PLAIN, 12);
     }
 }

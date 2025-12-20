@@ -35,6 +35,21 @@ public class LoginView extends JFrame {
         rootPanel.addMouseListener(dragHandler);
         rootPanel.addMouseMotionListener(dragHandler);
 
+        // Settings Button (Top Right)
+        ModernButton btnSettings = new ModernButton("SET");
+        btnSettings.setPreferredSize(new Dimension(60, 30));
+        btnSettings.setFont(Theme.FONT_EN_TECH);
+        btnSettings.addActionListener(e -> new view.component.ConfigDialog(this).setVisible(true));
+
+        GridBagConstraints gbcSet = new GridBagConstraints();
+        gbcSet.gridx = 0;
+        gbcSet.gridy = 0;
+        gbcSet.weightx = 1.0;
+        gbcSet.weighty = 1.0;
+        gbcSet.anchor = GridBagConstraints.NORTHEAST;
+        gbcSet.insets = new Insets(10, 0, 0, 10);
+        rootPanel.add(btnSettings, gbcSet);
+
         add(rootPanel);
 
         // Center Login Form
@@ -97,7 +112,13 @@ public class LoginView extends JFrame {
         loginPanel.add(Box.createVerticalStrut(10));
         loginPanel.add(btnExit);
 
-        rootPanel.add(loginPanel, new GridBagConstraints());
+        GridBagConstraints gbcLogin = new GridBagConstraints();
+        gbcLogin.gridx = 0;
+        gbcLogin.gridy = 0;
+        gbcLogin.weightx = 1.0;
+        gbcLogin.weighty = 1.0;
+        gbcLogin.anchor = GridBagConstraints.CENTER;
+        rootPanel.add(loginPanel, gbcLogin);
     }
 
     private JPanel createAlignedPanel(JComponent c) {

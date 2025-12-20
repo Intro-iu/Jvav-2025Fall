@@ -54,6 +54,29 @@ This project demonstrates how to create a high-end, aesthetic, and functional GU
     password=your_password
     ```
 
+### Packaging & Distribution (打包与发布)
+To package the application into a JAR file:
+
+1.  **Ensure MySQL Driver is in `lib/`**: `mysql-connector-j-8.2.0.jar` (or match your version in `MANIFEST.MF`).
+2.  **Compile**: `javac -d bin -cp "lib/*" -sourcepath src -encoding UTF-8 -Xlint:all src/App.java`
+3.  **Package**:
+    ```bash
+    jar cvfm JvavNews.jar MANIFEST.MF -C bin .
+    ```
+4.  **Run**:
+    - **Windows**: Double-click `run.bat` or run `java -jar JvavNews.jar`.
+    - **Note**: Ensure the `lib` folder is in the same directory as the JAR file.
+
+### Directory Structure for Release (发布目录结构)
+```
+Release/
+├── JvavNews.jar       # Executable Application
+├── run.bat            # Quick Start Script
+├── lib/               # Dependency Libraries
+│   └── mysql-connector-j-*.jar
+└── fonts/             # Embedded Fonts (Reference)
+```
+
 ### Build & Run (编译与运行)
 
 **Windows (PowerShell):**

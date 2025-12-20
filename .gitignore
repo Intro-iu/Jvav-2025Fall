@@ -1,5 +1,10 @@
-bin/
 *.class
+*.jar
+*.bat
+MANIFEST.MF
+bin/
+lib/
+!lib/*.jar
 
 .vscode/
 *.code-workspace
