@@ -1,7 +1,6 @@
 *.class
 *.jar
-*.bat
-MANIFEST.MF
+
 bin/
 lib/
 !lib/*.jar
