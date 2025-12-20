@@ -39,7 +39,8 @@ jobs:
         mkdir -p bin/fonts
         cp -r src/fonts/* bin/fonts/
         unzip -o lib/mysql-connector-j-*.jar -d bin/
-        rm -rf bin/META-INF
+        # Remove only signature files and OLD manifest, preserving services/ (Critical for JDBC)
+        rm -f bin/META-INF/*.SF bin/META-INF/*.DSA bin/META-INF/*.RSA bin/META-INF/MANIFEST.MF
         echo "Main-Class: App" > FAT_MANIFEST.MF
         jar cvfm JvavNews.jar FAT_MANIFEST.MF -C bin .
 
