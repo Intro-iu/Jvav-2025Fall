@@ -50,4 +50,3 @@ jobs:
         name: JvavNews-Release
         path: |
           JvavNews.jar
-          run.bat

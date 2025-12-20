@@ -70,8 +70,7 @@ To package the application into a JAR file:
 ### Directory Structure for Release (发布目录结构)
 ```
 Release/
-├── JvavNews.jar       # Executable Application (Single File)
-└── run.bat            # Quick Start Script
+└── JvavNews.jar       # Executable Application (Single File)
 ```
 
 ### Build & Run (编译与运行)
