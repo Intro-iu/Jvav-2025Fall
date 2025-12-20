@@ -23,16 +23,28 @@ public class DialogFactory {
 
     public static void showMessage(Component parent, String message, String title) {
         Window window = SwingUtilities.getWindowAncestor(parent);
-        ModernDialog dialog = new ModernDialog(window, title, 300, 150);
+        ModernDialog dialog = new ModernDialog(window, title, 400, 250);
 
         JPanel content = new JPanel(new BorderLayout());
         content.setBackground(Theme.BG_COLOR);
         content.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JLabel lblMsg = new JLabel("<html><center>" + message + "</center></html>", SwingConstants.CENTER);
-        lblMsg.setForeground(Theme.TEXT_COLOR);
-        lblMsg.setFont(Theme.FONT_REGULAR);
-        content.add(lblMsg, BorderLayout.CENTER);
+        JTextArea txtMsg = new JTextArea(message);
+        txtMsg.setFont(Theme.FONT_REGULAR);
+        txtMsg.setForeground(Theme.TEXT_COLOR);
+        txtMsg.setBackground(Theme.BG_COLOR);
+        txtMsg.setLineWrap(true);
+        txtMsg.setWrapStyleWord(true);
+        txtMsg.setEditable(false);
+        txtMsg.setCaretPosition(0);
+
+        JScrollPane scroll = new JScrollPane(txtMsg);
+        scroll.setBorder(BorderFactory.createEmptyBorder());
+        scroll.getViewport().setBackground(Theme.BG_COLOR);
+        scroll.getVerticalScrollBar().setUI(new ModernScrollBarUI());
+        scroll.getHorizontalScrollBar().setUI(new ModernScrollBarUI());
+
+        content.add(scroll, BorderLayout.CENTER);
 
         JPanel btnPanel = new JPanel();
         btnPanel.setBackground(Theme.BG_COLOR);
