@@ -30,11 +30,14 @@ jobs:
       # Copy fonts from src/fonts to bin/fonts so they are included in the JAR
       run: |
     - name: Build Fat JAR
-      # 1. Extract MySQL Driver to bin/
-      # 2. Remove Signature files to prevent security errors
-      # 3. Create simplified Manifest (No Class-Path needed)
-      # 4. Repackage everything into JvavNews.jar
+      # 1. Copy Fonts to bin/
+      # 2. Extract MySQL Driver to bin/
+      # 3. Remove Signature files to prevent security errors
+      # 4. Create simplified Manifest (No Class-Path needed)
+      # 5. Repackage everything into JvavNews.jar
       run: |
+        mkdir -p bin/fonts
+        cp -r src/fonts/* bin/fonts/
         unzip -o lib/mysql-connector-j-*.jar -d bin/
         rm -rf bin/META-INF
         echo "Main-Class: App" > FAT_MANIFEST.MF

@@ -27,18 +27,28 @@ public class Theme {
     }
 
     private static void loadFonts() {
+        // 1. Initialize with defaults first (Fail-safe)
+        useDefaults();
+
         try {
-            // Load custom fonts from classpath (supports JAR packaging)
-            FONT_TITLE = loadFont("/fonts/方正准雅宋简体.TTF", 24f);
-            FONT_REGULAR = loadFont("/fonts/SourceHanSansSC-Normal.otf", 14f);
-            FONT_EN_TITLE = loadFont("/fonts/NOVECENTO-WIDE-NORMAL-2.OTF", 20f); // Bold is handled by registering? No,
-                                                                                 // deriveFont logic needed
-            if (FONT_EN_TITLE != null)
-                FONT_EN_TITLE = FONT_EN_TITLE.deriveFont(Font.BOLD, 20f);
+            // 2. Try load custom fonts from classpath
+            Font title = loadFont("/fonts/方正准雅宋简体.TTF", 24f);
+            if (title != null)
+                FONT_TITLE = title;
 
-            FONT_EN_TECH = loadFont("/fonts/JOVANNY LEMONAD - BENDER.OTF", 12f);
+            Font regular = loadFont("/fonts/SourceHanSansSC-Normal.otf", 14f);
+            if (regular != null)
+                FONT_REGULAR = regular;
 
-            // Register to GraphicsEnv
+            Font enTitle = loadFont("/fonts/NOVECENTO-WIDE-NORMAL-2.OTF", 20f);
+            if (enTitle != null)
+                FONT_EN_TITLE = enTitle.deriveFont(Font.BOLD, 20f);
+
+            Font enTech = loadFont("/fonts/JOVANNY LEMONAD - BENDER.OTF", 12f);
+            if (enTech != null)
+                FONT_EN_TECH = enTech;
+
+            // Register to GraphicsEnv to ensure Swing can use them if needed
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             if (FONT_TITLE != null)
                 ge.registerFont(FONT_TITLE);
@@ -48,10 +58,10 @@ public class Theme {
                 ge.registerFont(FONT_EN_TITLE);
             if (FONT_EN_TECH != null)
                 ge.registerFont(FONT_EN_TECH);
+
         } catch (Exception e) {
-            System.err.println("Failed to load fonts, using defaults.");
+            System.err.println("Failed to load custom fonts, keeping defaults.");
             e.printStackTrace();
-            useDefaults();
         }
     }
 
