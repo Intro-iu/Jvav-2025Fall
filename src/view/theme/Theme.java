@@ -32,19 +32,19 @@ public class Theme {
 
         try {
             // 2. Try load custom fonts from classpath
-            Font title = loadFont("/fonts/方正准雅宋简体.TTF", 24f);
+            Font title = loadFont("/fonts/fz-yasong.ttf", 24f);
             if (title != null)
                 FONT_TITLE = title;
 
-            Font regular = loadFont("/fonts/SourceHanSansSC-Normal.otf", 14f);
+            Font regular = loadFont("/fonts/source-han-sans.otf", 14f);
             if (regular != null)
                 FONT_REGULAR = regular;
 
-            Font enTitle = loadFont("/fonts/NOVECENTO-WIDE-NORMAL-2.OTF", 20f);
+            Font enTitle = loadFont("/fonts/novecento.otf", 20f);
             if (enTitle != null)
                 FONT_EN_TITLE = enTitle.deriveFont(Font.BOLD, 20f);
 
-            Font enTech = loadFont("/fonts/JOVANNY LEMONAD - BENDER.OTF", 12f);
+            Font enTech = loadFont("/fonts/bender.otf", 12f);
             if (enTech != null)
                 FONT_EN_TECH = enTech;
 
