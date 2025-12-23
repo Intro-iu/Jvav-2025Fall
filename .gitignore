@@ -11,3 +11,4 @@ lib/
 .DS_Store
 Thumbs.db
 src/db.properties
+db.properties
