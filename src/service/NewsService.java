@@ -7,8 +7,8 @@ import model.PageResult;
 public class NewsService {
     private NewsDAO newsDAO = new NewsDAO();
 
-    public PageResult<News> findPage(String title, int categoryId, int page, int pageSize) {
-        return newsDAO.findPage(title, categoryId, page, pageSize);
+    public PageResult<News> findPage(String title, int categoryId, java.util.Date startDate, java.util.Date endDate, int page, int pageSize) {
+        return newsDAO.findPage(title, categoryId, startDate, endDate, page, pageSize);
     }
 
     public boolean add(String title, String content, int categoryId, int authorId) {

@@ -19,6 +19,7 @@ public class ModernButton extends JButton {
         setForeground(Theme.TEXT_COLOR);
         setFocusPainted(false);
         setBorderPainted(false);
+        setMargin(new Insets(0, 0, 0, 0)); // Remove default padding
         setContentAreaFilled(false);
         setCursor(new Cursor(Cursor.HAND_CURSOR));
 

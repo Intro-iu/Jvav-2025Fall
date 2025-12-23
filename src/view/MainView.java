@@ -147,11 +147,11 @@ public class MainView extends JFrame {
         pnlControls.setOpaque(false);
 
         ModernButton btnMin = new ModernButton("-");
-        btnMin.setPreferredSize(new Dimension(45, 35));
+        btnMin.setPreferredSize(new Dimension(50, 35));
         btnMin.addActionListener(e -> setState(JFrame.ICONIFIED));
 
         ModernButton btnMax = new ModernButton("[ ]"); // ASCII Square
-        btnMax.setPreferredSize(new Dimension(45, 35));
+        btnMax.setPreferredSize(new Dimension(50, 35));
         btnMax.addActionListener(e -> {
             if (getExtendedState() == JFrame.MAXIMIZED_BOTH) {
                 setExtendedState(JFrame.NORMAL);
@@ -164,7 +164,7 @@ public class MainView extends JFrame {
         });
 
         ModernButton btnClose = new ModernButton("X");
-        btnClose.setPreferredSize(new Dimension(45, 35));
+        btnClose.setPreferredSize(new Dimension(50, 35));
         // Make Close button red on hover?
         // For now standard style.
         btnClose.addActionListener(e -> System.exit(0));

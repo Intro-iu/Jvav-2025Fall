@@ -9,7 +9,7 @@ import util.DBUtil;
 
 public class NewsDAO {
 
-    public PageResult<News> findPage(String searchTitle, int categoryId, int page, int pageSize) {
+    public PageResult<News> findPage(String searchTitle, int categoryId, java.util.Date startDate, java.util.Date endDate, int page, int pageSize) {
         List<News> list = new ArrayList<>();
         int offset = (page - 1) * pageSize;
 
@@ -23,6 +23,14 @@ public class NewsDAO {
         if (categoryId > 0) {
             whereSql.append("AND n.category_id = ? ");
             params.add(categoryId);
+        }
+        if (startDate != null) {
+            whereSql.append("AND n.publish_time >= ? ");
+            params.add(new java.sql.Timestamp(startDate.getTime()));
+        }
+        if (endDate != null) {
+            whereSql.append("AND n.publish_time <= ? ");
+            params.add(new java.sql.Timestamp(endDate.getTime()));
         }
 
         // Count SQL

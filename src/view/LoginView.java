@@ -37,7 +37,7 @@ public class LoginView extends JFrame {
 
         // Settings Button (Top Right)
         ModernButton btnSettings = new ModernButton("SET");
-        btnSettings.setPreferredSize(new Dimension(60, 30));
+        btnSettings.setPreferredSize(new Dimension(70, 30));
         btnSettings.setFont(Theme.FONT_EN_TECH);
         btnSettings.addActionListener(e -> new view.component.ConfigDialog(this).setVisible(true));
 

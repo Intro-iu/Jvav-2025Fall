@@ -12,11 +12,16 @@ import view.theme.Theme;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import java.util.Date;
+import java.util.Calendar;
+import java.text.SimpleDateFormat;
 
 public class HomeView extends JPanel {
     private static final long serialVersionUID = 1L;
     private JPanel feedPanel;
     private ModernTextField txtSearchTitle;
+    private ModernTextField txtStartDate;
+    private ModernTextField txtEndDate;
     private ModernComboBox<Category> cmbSearchCategory;
     private JLabel lblPageInfo;
     private ModernButton btnPrev;
@@ -38,23 +43,50 @@ public class HomeView extends JPanel {
         setBackground(Theme.BG_COLOR);
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Top Panel: Search
-        JPanel pnlTop = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        // Top Panel: Search (Split into 2 rows for better visibility)
+        JPanel pnlTop = new JPanel();
+        pnlTop.setLayout(new BoxLayout(pnlTop, BoxLayout.Y_AXIS));
         pnlTop.setBackground(Theme.BG_COLOR);
+
+        // Row 1: Search Title & Category
+        JPanel row1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        row1.setBackground(Theme.BG_COLOR);
 
         JLabel lblTitle = new JLabel("SEARCH:");
         lblTitle.setForeground(Theme.TEXT_COLOR);
         lblTitle.setFont(Theme.FONT_EN_TECH);
-        pnlTop.add(lblTitle);
+        row1.add(lblTitle);
 
         txtSearchTitle = new ModernTextField();
         txtSearchTitle.setColumns(20);
-        pnlTop.add(txtSearchTitle);
+        row1.add(txtSearchTitle);
 
         cmbSearchCategory = new ModernComboBox<>();
         cmbSearchCategory.addItem(new Category(0, "ALL CATEGORIES"));
         loadCategories();
-        pnlTop.add(cmbSearchCategory);
+        row1.add(cmbSearchCategory);
+
+        // Row 2: Date Filters & Buttons
+        JPanel row2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        row2.setBackground(Theme.BG_COLOR);
+
+        JLabel lblStart = new JLabel("START(Y-M-D):");
+        lblStart.setForeground(Theme.TEXT_COLOR);
+        lblStart.setFont(Theme.FONT_EN_TECH);
+        row2.add(lblStart);
+
+        txtStartDate = new ModernTextField();
+        txtStartDate.setColumns(8);
+        row2.add(txtStartDate);
+
+        JLabel lblEnd = new JLabel("END:");
+        lblEnd.setForeground(Theme.TEXT_COLOR);
+        lblEnd.setFont(Theme.FONT_EN_TECH);
+        row2.add(lblEnd);
+
+        txtEndDate = new ModernTextField();
+        txtEndDate.setColumns(8);
+        row2.add(txtEndDate);
 
         ModernButton btnSearch = new ModernButton("GO", true);
         btnSearch.addActionListener(e -> {
@@ -65,6 +97,8 @@ public class HomeView extends JPanel {
         ModernButton btnClear = new ModernButton("CLEAR");
         btnClear.addActionListener(e -> {
             txtSearchTitle.setText("");
+            txtStartDate.setText("");
+            txtEndDate.setText("");
             if (cmbSearchCategory.getItemCount() > 0) {
                 cmbSearchCategory.setSelectedIndex(0);
             }
@@ -72,8 +106,11 @@ public class HomeView extends JPanel {
             loadNews();
         });
 
-        pnlTop.add(btnSearch);
-        pnlTop.add(btnClear);
+        row2.add(btnSearch);
+        row2.add(btnClear);
+
+        pnlTop.add(row1);
+        pnlTop.add(row2);
 
         add(pnlTop, BorderLayout.NORTH);
 
@@ -176,7 +213,29 @@ public class HomeView extends JPanel {
         Category selectedCat = (Category) cmbSearchCategory.getSelectedItem();
         int catId = selectedCat != null ? selectedCat.getId() : 0;
 
-        PageResult<News> pageResult = newsService.findPage(title, catId, currentPage, pageSize);
+        Date startDate = null;
+        Date endDate = null;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            String s = txtStartDate.getText().trim();
+            if (!s.isEmpty()) startDate = sdf.parse(s);
+        } catch (Exception e) {}
+
+        try {
+            String eStr = txtEndDate.getText().trim();
+            if (!eStr.isEmpty()) {
+                Date d = sdf.parse(eStr);
+                Calendar c = Calendar.getInstance();
+                c.setTime(d);
+                c.set(Calendar.HOUR_OF_DAY, 23);
+                c.set(Calendar.MINUTE, 59);
+                c.set(Calendar.SECOND, 59);
+                endDate = c.getTime();
+            }
+        } catch (Exception e) {}
+
+        PageResult<News> pageResult = newsService.findPage(title, catId, startDate, endDate, currentPage, pageSize);
         List<News> list = pageResult.getList();
         totalPage = pageResult.getTotalPage();
         if (totalPage == 0)
