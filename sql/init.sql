@@ -1,4 +1,6 @@
 -- Safely initialize tables without dropping the database itself
+CREATE DATABASE IF NOT EXISTS newssys CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE newssys;
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS t_news;
 DROP TABLE IF EXISTS t_category;
