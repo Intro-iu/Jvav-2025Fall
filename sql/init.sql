@@ -1,6 +1,7 @@
 -- Safely initialize tables without dropping the database itself
-CREATE DATABASE IF NOT EXISTS newssys CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE newssys;
+SET NAMES utf8mb4;
+CREATE DATABASE IF NOT EXISTS news_db CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE news_db;
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS t_news;
 DROP TABLE IF EXISTS t_category;
@@ -13,13 +14,13 @@ CREATE TABLE t_user (
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(50) NOT NULL,
     nickname VARCHAR(50)
-);
+) DEFAULT CHARSET=utf8mb4;
 
 -- Categories table
 CREATE TABLE t_category (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL UNIQUE
-);
+) DEFAULT CHARSET=utf8mb4;
 
 -- News table
 CREATE TABLE t_news (
@@ -31,7 +32,7 @@ CREATE TABLE t_news (
     publish_time DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (category_id) REFERENCES t_category(id),
     FOREIGN KEY (author_id) REFERENCES t_user(id)
-);
+) DEFAULT CHARSET=utf8mb4;
 
 -- 1. Insert Users
 INSERT INTO t_user (username, password, nickname) VALUES 

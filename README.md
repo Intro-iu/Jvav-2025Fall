@@ -46,10 +46,10 @@ This project demonstrates how to create a high-end, aesthetic, and functional GU
 ### Database Setup (数据库配置)
 1.  Connect to your MySQL server.
 2.  Run the initialization script located at `sql/init.sql`.
-    > This will create the `newssys` database and populate it with mock data (User: `admin`/`123456`).
+    > This will create the `news_db` database and populate it with mock data (User: `admin`/`123456`).
 3.  Verify/Edit `src/db.properties` configuration (created on first run or manually):
     ```properties
-    url=jdbc:mysql://localhost:3306/newssys?useSSL=false&characterEncoding=utf8
+    url=jdbc:mysql://localhost:3306/news_db?useSSL=false&characterEncoding=utf8
     username=root
     password=your_password
     ```
