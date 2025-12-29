@@ -23,35 +23,29 @@ public class MainView extends JFrame {
 
     public MainView(User user) {
         setTitle("新闻信息管理系统");
-        setUndecorated(true); // Remove system decorations
+        setUndecorated(true);
         setSize(1024, 768);
         setLocationRelativeTo(null);
 
-        // Enable resizing
         new WindowResizer(this, 8);
 
-        // Root Panel - Dark Background + Border
         JPanel rootPanel = new JPanel(new BorderLayout());
         rootPanel.setBackground(Theme.BG_COLOR);
-        rootPanel.setBorder(new LineBorder(Theme.ACCENT_COLOR, 1)); // Thin accent border
+        rootPanel.setBorder(new LineBorder(Theme.ACCENT_COLOR, 1));
         setContentPane(rootPanel);
 
-        // Custom Title Bar
         JPanel titleBar = createTitleBar();
         rootPanel.add(titleBar, BorderLayout.NORTH);
 
-        // Main Content Area (Below Title Bar)
         JPanel mainContainer = new JPanel(new BorderLayout());
         mainContainer.setOpaque(false);
 
-        // Sidebar
         JPanel sidebar = new JPanel();
         sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
         sidebar.setBackground(Theme.SIDEBAR_COLOR);
         sidebar.setPreferredSize(new Dimension(200, 0));
         sidebar.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
-        // Sidebar Content
         JLabel lblLogo = new JLabel("NEWS SYS");
         lblLogo.setFont(Theme.FONT_EN_TITLE);
         lblLogo.setForeground(Theme.ACCENT_COLOR);
@@ -66,12 +60,8 @@ public class MainView extends JFrame {
 
         sidebar.add(Box.createVerticalStrut(40));
 
-        // Navigation Buttons
         ModernButton btnNews = createSideButton("NEWS / 新闻");
         ModernButton btnCat = createSideButton("CATEGORY / 分类");
-        // We can keep an Exit button in sidebar or rely on TitleBar close.
-        // Let's keep a "LOGOUT" in sidebar maybe? Or just keep it as is.
-        // User asked for "Close" in title bar, sidebar Exit is redundant but harmless.
 
         navButtons.add(btnNews);
         navButtons.add(btnCat);
@@ -82,7 +72,6 @@ public class MainView extends JFrame {
 
         sidebar.add(Box.createVerticalGlue());
 
-        // User Info
         JLabel lblUser = new JLabel("USER: " + user.getUsername());
         lblUser.setFont(Theme.FONT_EN_TECH);
         lblUser.setForeground(Theme.TEXT_DIM_COLOR);
@@ -92,7 +81,6 @@ public class MainView extends JFrame {
 
         mainContainer.add(sidebar, BorderLayout.WEST);
 
-        // Center Content Area
         PatternPanel contentWrapper = new PatternPanel(PatternPanel.Pattern.RECTANGLES);
         contentWrapper.setLayout(new BorderLayout());
         contentWrapper.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -101,10 +89,8 @@ public class MainView extends JFrame {
         centerPanel = new JPanel(cardLayout);
         centerPanel.setOpaque(false);
 
-        // Home View (Merged)
         HomeView homeView = new HomeView(user);
 
-        // Category View
         CategoryView categoryView = new CategoryView();
 
         centerPanel.add(homeView, "NEWS");
@@ -115,7 +101,6 @@ public class MainView extends JFrame {
 
         rootPanel.add(mainContainer, BorderLayout.CENTER);
 
-        // Actions
         btnNews.addActionListener(e -> {
             homeView.refresh();
             cardLayout.show(centerPanel, "NEWS");
@@ -126,7 +111,6 @@ public class MainView extends JFrame {
             updateNavState(btnCat);
         });
 
-        // Initial state
         updateNavState(btnNews);
     }
 
@@ -136,13 +120,11 @@ public class MainView extends JFrame {
         titleBar.setPreferredSize(new Dimension(800, 35));
         titleBar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(60, 60, 60)));
 
-        // Left: Title
         JLabel lblTitle = new JLabel("  News System - 2025 Fall");
         lblTitle.setFont(Theme.FONT_EN_TECH.deriveFont(14f));
         lblTitle.setForeground(Theme.TEXT_DIM_COLOR);
         titleBar.add(lblTitle, BorderLayout.WEST);
 
-        // Right: Window Controls
         JPanel pnlControls = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         pnlControls.setOpaque(false);
 
@@ -150,7 +132,7 @@ public class MainView extends JFrame {
         btnMin.setPreferredSize(new Dimension(50, 35));
         btnMin.addActionListener(e -> setState(JFrame.ICONIFIED));
 
-        ModernButton btnMax = new ModernButton("[ ]"); // ASCII Square
+        ModernButton btnMax = new ModernButton("[ ]");
         btnMax.setPreferredSize(new Dimension(50, 35));
         btnMax.addActionListener(e -> {
             if (getExtendedState() == JFrame.MAXIMIZED_BOTH) {
@@ -159,14 +141,12 @@ public class MainView extends JFrame {
                 new WindowResizer(this, 8);
             } else {
                 setExtendedState(JFrame.MAXIMIZED_BOTH);
-                btnMax.setText("]["); // ASCII Restore
+                btnMax.setText("][");
             }
         });
 
         ModernButton btnClose = new ModernButton("X");
         btnClose.setPreferredSize(new Dimension(50, 35));
-        // Make Close button red on hover?
-        // For now standard style.
         btnClose.addActionListener(e -> System.exit(0));
 
         pnlControls.add(btnMin);
@@ -175,7 +155,6 @@ public class MainView extends JFrame {
 
         titleBar.add(pnlControls, BorderLayout.EAST);
 
-        // Drag Support
         MouseAdapter ma = new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {

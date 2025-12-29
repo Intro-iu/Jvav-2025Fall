@@ -29,6 +29,6 @@ public class User {
 
     @Override
     public String toString() {
-        return nickname; // Useful for UI display if needed
+        return nickname;
     }
 }

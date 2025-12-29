@@ -24,9 +24,6 @@ public class DBUtil {
         props = ConfigUtil.loadProps();
     }
 
-    /**
-     * Get database connection
-     */
     public static Connection getConnection() throws SQLException {
         if (props == null || props.isEmpty()) {
             reloadConfig();
@@ -37,9 +34,6 @@ public class DBUtil {
                 props.getProperty("db.password"));
     }
 
-    /**
-     * Close resources
-     */
     public static void close(Connection conn, Statement stmt, ResultSet rs) {
         try {
             if (rs != null)

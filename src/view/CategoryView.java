@@ -55,7 +55,6 @@ public class CategoryView extends JPanel {
 
         add(scrollPane, BorderLayout.CENTER);
 
-        // Initial Load
         loadCategories();
     }
 

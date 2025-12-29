@@ -27,12 +27,10 @@ public class HomeView extends JPanel {
     private ModernButton btnPrev;
     private ModernButton btnNext;
 
-    // Services
     private NewsService newsService = new NewsService();
     private CategoryService categoryService = new CategoryService();
     private User currentUser;
 
-    // State
     private int currentPage = 1;
     private int pageSize = 5;
     private int totalPage = 0;
@@ -43,12 +41,10 @@ public class HomeView extends JPanel {
         setBackground(Theme.BG_COLOR);
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Top Panel: Search (Split into 2 rows for better visibility)
         JPanel pnlTop = new JPanel();
         pnlTop.setLayout(new BoxLayout(pnlTop, BoxLayout.Y_AXIS));
         pnlTop.setBackground(Theme.BG_COLOR);
 
-        // Row 1: Search Title & Category
         JPanel row1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
         row1.setBackground(Theme.BG_COLOR);
 
@@ -66,7 +62,6 @@ public class HomeView extends JPanel {
         loadCategories();
         row1.add(cmbSearchCategory);
 
-        // Row 2: Date Filters & Buttons
         JPanel row2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
         row2.setBackground(Theme.BG_COLOR);
 
@@ -114,7 +109,6 @@ public class HomeView extends JPanel {
 
         add(pnlTop, BorderLayout.NORTH);
 
-        // Center Panel: Scrollable Feed
         feedPanel = new ScrollablePanel();
         feedPanel.setLayout(new BoxLayout(feedPanel, BoxLayout.Y_AXIS));
         feedPanel.setBackground(Theme.BG_COLOR);
@@ -135,11 +129,9 @@ public class HomeView extends JPanel {
 
         add(scrollPane, BorderLayout.CENTER);
 
-        // Bottom Panel: Pagination + Add Button
         JPanel pnlBottom = new JPanel(new BorderLayout());
         pnlBottom.setBackground(Theme.BG_COLOR);
 
-        // Pager
         JPanel pnlPager = new JPanel(new FlowLayout(FlowLayout.CENTER));
         pnlPager.setBackground(Theme.BG_COLOR);
 
@@ -167,11 +159,6 @@ public class HomeView extends JPanel {
         pnlPager.add(lblPageInfo);
         pnlPager.add(btnNext);
 
-        // Add News Button (Center alignment hack using border layout constraints or
-        // gridbag?)
-        // Let's put Pager on LEFT and Add Button on CENTER or RIGHT.
-        // Requested: "Page bottom should have an Add News button"
-        // Let's make it prominent.
 
         JPanel pnlActions = new JPanel(new FlowLayout(FlowLayout.CENTER));
         pnlActions.setBackground(Theme.BG_COLOR);
@@ -181,11 +168,10 @@ public class HomeView extends JPanel {
         pnlActions.add(btnAdd);
 
         pnlBottom.add(pnlPager, BorderLayout.WEST);
-        pnlBottom.add(pnlActions, BorderLayout.CENTER); // Center the big button
+        pnlBottom.add(pnlActions, BorderLayout.CENTER);
 
         add(pnlBottom, BorderLayout.SOUTH);
 
-        // Initial Load
         loadNews();
     }
 
@@ -250,10 +236,9 @@ public class HomeView extends JPanel {
             feedPanel.add(lblEmpty);
         } else {
             for (News n : list) {
-                // Pass listeners for Edit and Delete
                 NewsCard card = new NewsCard(n,
-                        e -> openEditDialog(n), // Edit
-                        e -> deleteNews(n) // Delete
+                        e -> openEditDialog(n),
+                        e -> deleteNews(n)
                 );
                 feedPanel.add(card);
                 feedPanel.add(Box.createVerticalStrut(10));
@@ -267,7 +252,6 @@ public class HomeView extends JPanel {
         feedPanel.revalidate();
         feedPanel.repaint();
 
-        // Scroll to top
         SwingUtilities.invokeLater(() -> {
             JScrollPane scroller = (JScrollPane) SwingUtilities.getAncestorOfClass(JScrollPane.class, feedPanel);
             if (scroller != null)
@@ -325,7 +309,6 @@ public class HomeView extends JPanel {
 
         JScrollPane scrollContent = new JScrollPane(txtContent);
         scrollContent.setBorder(null);
-        // Style scrollbar for editor too
         scrollContent.getVerticalScrollBar().setBackground(Theme.BG_COLOR);
         scrollContent.getVerticalScrollBar().setUI(new ModernScrollBarUI());
 
@@ -333,7 +316,6 @@ public class HomeView extends JPanel {
 
         dialog.add(centerPanel, BorderLayout.CENTER);
 
-        // Pre-fill if editing
         if (news != null) {
             txtTitle.setText(news.getTitle());
             txtContent.setText(news.getContent());
@@ -366,10 +348,8 @@ public class HomeView extends JPanel {
 
             boolean success;
             if (news == null) {
-                // Add
                 success = newsService.add(t, c, cat.getId(), currentUser.getId());
             } else {
-                // Update
                 success = newsService.update(news.getId(), t, c, cat.getId());
             }
 

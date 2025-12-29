@@ -25,9 +25,7 @@ public class ScriptRunner {
                 if (line.endsWith(";")) {
                     String sql = sb.toString();
                     System.out.println("Executing: " + sql);
-                    // Handle USE command or just ignore if URL has DB
                     if (sql.toUpperCase().startsWith("USE ")) {
-                        // ignore, already connected
                     } else {
                         stmt.execute(sql);
                     }

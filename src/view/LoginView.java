@@ -25,17 +25,14 @@ public class LoginView extends JFrame {
         setLocationRelativeTo(null);
         setUndecorated(true);
 
-        // Main Panel with Dot Pattern
         PatternPanel rootPanel = new PatternPanel(PatternPanel.Pattern.POINTS);
         rootPanel.setLayout(new GridBagLayout());
         rootPanel.setBorder(BorderFactory.createLineBorder(Theme.ACCENT_COLOR, 2));
 
-        // Drag Handler
         MouseDragHandler dragHandler = new MouseDragHandler(this);
         rootPanel.addMouseListener(dragHandler);
         rootPanel.addMouseMotionListener(dragHandler);
 
-        // Settings Button (Top Right)
         ModernButton btnSettings = new ModernButton("SET");
         btnSettings.setPreferredSize(new Dimension(70, 30));
         btnSettings.setFont(Theme.FONT_EN_TECH);
@@ -52,13 +49,11 @@ public class LoginView extends JFrame {
 
         add(rootPanel);
 
-        // Center Login Form
         JPanel loginPanel = new JPanel();
         loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.Y_AXIS));
         loginPanel.setOpaque(false);
         loginPanel.setBorder(BorderFactory.createEmptyBorder(50, 40, 50, 40));
 
-        // Logo / Title
         JLabel lblTitle = new JLabel("SYSTEM LOGIN");
         lblTitle.setFont(Theme.FONT_EN_TITLE.deriveFont(28f));
         lblTitle.setForeground(Theme.ACCENT_COLOR);
@@ -67,31 +62,26 @@ public class LoginView extends JFrame {
 
         loginPanel.add(Box.createVerticalStrut(40));
 
-        // Username
         JLabel lblUser = new JLabel("USERNAME:");
         lblUser.setForeground(Theme.TEXT_DIM_COLOR);
         lblUser.setFont(Theme.FONT_EN_TECH);
         loginPanel.add(createAlignedPanel(lblUser));
 
         ModernTextField txtUsername = new ModernTextField();
-        // Input cleared
         loginPanel.add(txtUsername);
 
         loginPanel.add(Box.createVerticalStrut(20));
 
-        // Password
         JLabel lblPass = new JLabel("PASSWORD:");
         lblPass.setForeground(Theme.TEXT_DIM_COLOR);
         lblPass.setFont(Theme.FONT_EN_TECH);
         loginPanel.add(createAlignedPanel(lblPass));
 
         ModernPasswordField txtPassword = new ModernPasswordField();
-        // Input cleared
         loginPanel.add(txtPassword);
 
         loginPanel.add(Box.createVerticalStrut(40));
 
-        // Buttons
         ModernButton btnLogin = new ModernButton("ENTER SYSTEM", true);
         btnLogin.addActionListener(e -> {
             String username = txtUsername.getText();
@@ -129,7 +119,6 @@ public class LoginView extends JFrame {
         return p;
     }
 
-    // Internal Drag Handler
     private static class MouseDragHandler extends MouseAdapter {
         private Point mouseDownCompCoords = null;
         private JFrame frame;
